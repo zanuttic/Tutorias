@@ -11,7 +11,7 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-Club_Proyect-29EA5CCE-0FA1-4B38-A11C-2BF7C2C1CD00")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-Club_Proyect-ABD274CE-13B9-4948-BE8B-BE1DD2D43C54")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Club_Proyect")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

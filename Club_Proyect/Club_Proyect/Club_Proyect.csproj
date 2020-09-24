@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-Club_Proyect-29EA5CCE-0FA1-4B38-A11C-2BF7C2C1CD00</UserSecretsId>
+    <UserSecretsId>aspnet-Club_Proyect-ABD274CE-13B9-4948-BE8B-BE1DD2D43C54</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
