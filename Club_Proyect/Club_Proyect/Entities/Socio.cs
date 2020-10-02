@@ -18,10 +18,6 @@ namespace Club_Proyect.Entity
 
         public bool ActivoOno { get; set; }
 
-        public string Deporte { get; set; }
-
-
-         
 
     }
 }
