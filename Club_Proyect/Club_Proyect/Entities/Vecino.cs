@@ -8,5 +8,6 @@ namespace Club_Proyect.Entities
     public class Vecino
     {
         public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }
