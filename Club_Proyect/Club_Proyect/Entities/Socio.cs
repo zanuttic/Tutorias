@@ -14,9 +14,12 @@ namespace Club_Proyect.Entity
 
         public DateTime FechaIngresoClub { get; set; }
 
-        public int Categoria { get; set; }
+        //public int Categoria { get; set; }
 
         public bool ActivoOno { get; set; }
+
+        public string Deporte { get; set; }
+
 
          
 
