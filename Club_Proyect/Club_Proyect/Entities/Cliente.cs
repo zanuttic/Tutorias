@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Club_Proyect.Entity
 {
-    public class Cliente : Persona
+    public class Cliente
     {
-        [Key]
+        public Persona persona {get;set;}
+        public Guid ID { get; set; }
         public int Num_Cliente { get; set; }
         public double Saldo { get; set; }
         public bool Activo_oNo { get; set; }

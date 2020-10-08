@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Club_Proyect.Entity
 {
-    public class Socio : Persona
+    public class Socio 
     {
-
-        [Key]
+        public Persona persona { get; set; }
+        public Guid ID { get; set; }
         public int NumSocio { get; set; }
 
         public DateTime FechaIngresoClub { get; set; }
 
-        //public int Categoria { get; set; }
+        public int Categoria { get; set; }
 
         public bool ActivoOno { get; set; }
 
