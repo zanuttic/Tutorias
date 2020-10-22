@@ -44,8 +44,7 @@ namespace Club_Proyect
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<Club_ProyectContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("Club_ProyectContext")));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,9 +12,9 @@ namespace Club_Proyect.Controllers
 {
     public class EmpleadosController : Controller
     {
-        private readonly Club_ProyectContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EmpleadosController(Club_ProyectContext context)
+        public EmpleadosController(ApplicationDbContext context)
         {
             _context = context;
         }

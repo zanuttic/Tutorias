@@ -12,9 +12,9 @@ namespace Club_Proyect.Controllers
 {
     public class VecinosController : Controller
     {
-        private readonly Club_ProyectContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public VecinosController(Club_ProyectContext context)
+        public VecinosController(ApplicationDbContext context)
         {
             _context = context;
         }
