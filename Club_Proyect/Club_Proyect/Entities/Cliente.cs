@@ -10,6 +10,8 @@ namespace Club_Proyect.Entity
     public class Cliente
     {
         public Persona persona {get;set;}
+
+        [Key]
         public Guid ID { get; set; }
         public int Num_Cliente { get; set; }
         public double Saldo { get; set; }

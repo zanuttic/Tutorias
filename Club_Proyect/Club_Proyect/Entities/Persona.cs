@@ -8,6 +8,7 @@ namespace Club_Proyect.Entity
 {
     public class Persona 
     {
+        [Key]
         public Guid ID { get; set; }
         public int DNI { get; set; }
 
