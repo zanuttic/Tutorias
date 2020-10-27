@@ -7,19 +7,124 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Club_Proyect.Data.Migrations
+namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200924174234_primerMigracion")]
-    partial class primerMigracion
+    [Migration("20201023171924_PrimeraMigracion")]
+    partial class PrimeraMigracion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Club_Proyect.Entities.Vecino", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<Guid?>("personaID");
+
+                    b.Property<string>("telefono");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("personaID");
+
+                    b.ToTable("Vecino");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Cliente", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Activo_oNo");
+
+                    b.Property<int>("Num_Cliente");
+
+                    b.Property<double>("Saldo");
+
+                    b.Property<Guid?>("personaID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("personaID");
+
+                    b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Empleado", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Activo_oNo");
+
+                    b.Property<DateTime>("Fecha_Inicio");
+
+                    b.Property<int>("Num_Legajo");
+
+                    b.Property<string>("Sector");
+
+                    b.Property<Guid?>("personaID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("personaID");
+
+                    b.ToTable("Empleado");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Persona", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Activo");
+
+                    b.Property<string>("Apellido");
+
+                    b.Property<int>("DNI");
+
+                    b.Property<string>("Direccion");
+
+                    b.Property<DateTime>("FechaNacimiento");
+
+                    b.Property<string>("Nombre");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Persona");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Socio", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("ActivoOno");
+
+                    b.Property<int>("Categoria");
+
+                    b.Property<DateTime>("FechaIngresoClub");
+
+                    b.Property<int>("NumSocio");
+
+                    b.Property<Guid?>("personaID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("personaID");
+
+                    b.ToTable("Socio");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -184,6 +289,34 @@ namespace Club_Proyect.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Vecino", b =>
+                {
+                    b.HasOne("Club_Proyect.Entity.Persona", "persona")
+                        .WithMany()
+                        .HasForeignKey("personaID");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Cliente", b =>
+                {
+                    b.HasOne("Club_Proyect.Entity.Persona", "persona")
+                        .WithMany()
+                        .HasForeignKey("personaID");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Empleado", b =>
+                {
+                    b.HasOne("Club_Proyect.Entity.Persona", "persona")
+                        .WithMany()
+                        .HasForeignKey("personaID");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entity.Socio", b =>
+                {
+                    b.HasOne("Club_Proyect.Entity.Persona", "persona")
+                        .WithMany()
+                        .HasForeignKey("personaID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

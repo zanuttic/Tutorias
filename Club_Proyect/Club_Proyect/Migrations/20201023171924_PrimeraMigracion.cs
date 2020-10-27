@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Club_Proyect.Data.Migrations
+namespace Club_Proyect.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class PrimeraMigracion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,6 +45,23 @@ namespace Club_Proyect.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Persona",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    DNI = table.Column<int>(nullable: false),
+                    Nombre = table.Column<string>(nullable: true),
+                    Apellido = table.Column<string>(nullable: true),
+                    FechaNacimiento = table.Column<DateTime>(nullable: false),
+                    Direccion = table.Column<string>(nullable: true),
+                    Activo = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Persona", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +170,92 @@ namespace Club_Proyect.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cliente",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    personaID = table.Column<Guid>(nullable: true),
+                    Num_Cliente = table.Column<int>(nullable: false),
+                    Saldo = table.Column<double>(nullable: false),
+                    Activo_oNo = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cliente", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Cliente_Persona_personaID",
+                        column: x => x.personaID,
+                        principalTable: "Persona",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Empleado",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    personaID = table.Column<Guid>(nullable: true),
+                    Num_Legajo = table.Column<int>(nullable: false),
+                    Fecha_Inicio = table.Column<DateTime>(nullable: false),
+                    Sector = table.Column<string>(nullable: true),
+                    Activo_oNo = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Empleado", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Empleado_Persona_personaID",
+                        column: x => x.personaID,
+                        principalTable: "Persona",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Socio",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    personaID = table.Column<Guid>(nullable: true),
+                    NumSocio = table.Column<int>(nullable: false),
+                    FechaIngresoClub = table.Column<DateTime>(nullable: false),
+                    Categoria = table.Column<int>(nullable: false),
+                    ActivoOno = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Socio", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Socio_Persona_personaID",
+                        column: x => x.personaID,
+                        principalTable: "Persona",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vecino",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    personaID = table.Column<Guid>(nullable: true),
+                    Nombre = table.Column<string>(nullable: true),
+                    telefono = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vecino", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vecino_Persona_personaID",
+                        column: x => x.personaID,
+                        principalTable: "Persona",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +294,26 @@ namespace Club_Proyect.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_personaID",
+                table: "Cliente",
+                column: "personaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Empleado_personaID",
+                table: "Empleado",
+                column: "personaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Socio_personaID",
+                table: "Socio",
+                column: "personaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vecino_personaID",
+                table: "Vecino",
+                column: "personaID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +334,25 @@ namespace Club_Proyect.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Empleado");
+
+            migrationBuilder.DropTable(
+                name: "Socio");
+
+            migrationBuilder.DropTable(
+                name: "Vecino");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Persona");
         }
     }
 }

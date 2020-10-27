@@ -9,6 +9,7 @@ namespace Club_Proyect.Entity
     public class Socio 
     {
         public Persona persona { get; set; }
+        [Key]
         public Guid ID { get; set; }
         public int NumSocio { get; set; }
 

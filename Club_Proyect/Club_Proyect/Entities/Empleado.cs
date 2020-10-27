@@ -9,6 +9,7 @@ namespace Club_Proyect.Entity
     public class Empleado 
     {
         public Persona persona { get; set; }
+        [Key]
         public Guid ID { get; set; }
         public int Num_Legajo { get; set; }
         public DateTime Fecha_Inicio { get; set; }
