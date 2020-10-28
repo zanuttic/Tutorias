@@ -22,6 +22,8 @@ namespace Club_Proyect.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
+            var listaCliente = _context.Cliente.Where(c => c.Saldo > 50).ToList();
+
             return View(await _context.Cliente.ToListAsync());
         }
 
