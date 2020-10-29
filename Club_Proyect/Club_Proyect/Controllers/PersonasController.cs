@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PersonasController : Controller
     {
         private readonly ApplicationDbContext _context;
