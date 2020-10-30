@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmpleadosController : Controller
     {
+
         private readonly ApplicationDbContext _context;
 
         public EmpleadosController(ApplicationDbContext context)
@@ -54,6 +57,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Create([Bind("ID,Num_Legajo,Fecha_Inicio,Sector,Activo_oNo")] Empleado empleado)
         {
             if (ModelState.IsValid)

@@ -23,7 +23,7 @@ namespace Club_Proyect.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            var listaCliente = _context.Cliente.Where(c => c.Saldo > 50).ToList();
+            var listaCliente = _context.Cliente.Where(c => c.Saldo > 50).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
 
             return View(await _context.Cliente.ToListAsync());
         }
@@ -58,10 +58,19 @@ namespace Club_Proyect.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("ID,Num_Cliente,Saldo,Activo_oNo")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("ID,Num_Cliente,Saldo,Activo_oNo, persona")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
+                var persona = _context.Persona.FirstOrDefault(x => x.DNI == cliente.persona.DNI);
+
+                cliente.persona.Nombre = persona.Nombre;
+                cliente.persona.Apellido = persona.Apellido;
+                cliente.persona.Direccion = persona.Direccion;
+                cliente.persona.FechaNacimiento = persona.FechaNacimiento;
+                cliente.persona.ID = persona.ID;
+                cliente.persona.Activo = persona.Activo;
+
                 cliente.ID = Guid.NewGuid();
                 _context.Add(cliente);
                 await _context.SaveChangesAsync();
