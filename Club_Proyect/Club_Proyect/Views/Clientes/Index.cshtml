@@ -17,6 +17,15 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.persona.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.DNI)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Num_Cliente)
             </th>
             <th>
@@ -41,6 +50,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.DNI)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Num_Cliente)
             </td>

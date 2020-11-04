@@ -12,6 +12,12 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          
+            <div class="form-group">
+                <label asp-for="persona.DNI" class="control-label"></label>
+                <input asp-for="persona.DNI" class="form-control" />
+                <span asp-validation-for="persona.DNI" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Num_Legajo" class="control-label"></label>
                 <input asp-for="Num_Legajo" class="form-control" />
