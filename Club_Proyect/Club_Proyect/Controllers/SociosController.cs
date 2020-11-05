@@ -67,6 +67,7 @@ namespace Club_Proyect.Controllers
                 _context.Add(socio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
             return View(socio);
         }
