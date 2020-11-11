@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class PersonasController : Controller
     {
         private readonly ApplicationDbContext _context;

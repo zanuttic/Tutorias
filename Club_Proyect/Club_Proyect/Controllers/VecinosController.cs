@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
 
     public class VecinosController : Controller
     {
@@ -25,7 +25,7 @@ namespace Club_Proyect.Controllers
         // GET: Vecinos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vecino.ToListAsync());
+            return View(await _context.Vecino.Include(p => p.persona).ToListAsync());
         }
 
         // GET: Vecinos/Details/5
@@ -57,10 +57,12 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,telefono")] Vecino vecino)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,telefono,persona")] Vecino vecino)
         {
             if (ModelState.IsValid)
             {
+                var personaencontrada = _context.Persona.FirstOrDefault(p => p.DNI == vecino.persona.DNI);
+                vecino.persona = personaencontrada;
                 _context.Add(vecino);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

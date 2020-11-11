@@ -46,8 +46,8 @@
                             </li>
 
                         @*}*@
-                        @if (User.IsInRole("Admin"))
-                        {
+                        @*@if (User.IsInRole("Admin"))
+                        {*@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Personas" asp-action="Index">Personas</a>
                             </li>
@@ -60,7 +60,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Vecinos" asp-action="Index">Vecinos</a>
                             </li>
 
-                        }
+                        @*}*@
 
                     </ul>
                 </div>
