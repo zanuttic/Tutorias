@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
@@ -22,6 +23,8 @@ namespace Club_Proyect.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
+            var listaCliente = _context.Cliente.Where(c => c.Saldo > 50).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+
             return View(await _context.Cliente.ToListAsync());
         }
 
@@ -33,7 +36,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente
+            var cliente = await _context.Cliente.Include(x => x.persona)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (cliente == null)
             {
@@ -54,10 +57,32 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Num_Cliente,Saldo,Activo_oNo")] Cliente cliente)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("ID,Num_Cliente,Saldo,Activo_oNo, persona")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
+               
+                var persona = _context.Persona.FirstOrDefault(x => x.DNI == cliente.persona.DNI);
+                if (persona == null)
+                {
+                    return NotFound();
+                }
+                var personaid = persona.ID;
+                var clientetemp = _context.Cliente.FirstOrDefault(x => x.persona.ID == personaid);
+                if (clientetemp != null)
+                {
+                    return NotFound();
+                }
+
+
+                cliente.persona.Nombre = persona.Nombre;
+                cliente.persona.Apellido = persona.Apellido;
+                cliente.persona.Direccion = persona.Direccion;
+                cliente.persona.FechaNacimiento = persona.FechaNacimiento;
+                cliente.persona.ID = persona.ID;
+                cliente.persona.Activo = persona.Activo;
+
                 cliente.ID = Guid.NewGuid();
                 _context.Add(cliente);
                 await _context.SaveChangesAsync();
@@ -74,7 +99,8 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente.FindAsync(id);
+            var cliente = await _context.Cliente.Include(x => x.persona)
+               .FirstOrDefaultAsync(m => m.ID == id);
             if (cliente == null)
             {
                 return NotFound();
@@ -87,7 +113,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Num_Cliente,Saldo,Activo_oNo")] Cliente cliente)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Num_Cliente,Saldo,Activo_oNo, persona")] Cliente cliente)
         {
             if (id != cliente.ID)
             {

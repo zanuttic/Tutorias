@@ -7,17 +7,40 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Crear nuevo cliente</a>
+    }
+
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.DNI)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Num_Cliente)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Saldo)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.persona.DNI)
+            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Activo_oNo)
             </th>
@@ -28,10 +51,28 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.persona.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.DNI)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Num_Cliente)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Saldo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.persona.DNI)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Activo_oNo)

@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmpleadosController : Controller
     {
+
         private readonly ApplicationDbContext _context;
 
         public EmpleadosController(ApplicationDbContext context)
@@ -22,7 +25,7 @@ namespace Club_Proyect.Controllers
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Empleado.ToListAsync());
+            return View(await _context.Empleado.Include(x=> x.persona).ToListAsync());
         }
 
         // GET: Empleados/Details/5
@@ -33,7 +36,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var empleado = await _context.Empleado
+            var empleado = await _context.Empleado.Include(x => x.persona)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (empleado == null)
             {
@@ -54,12 +57,16 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Num_Legajo,Fecha_Inicio,Sector,Activo_oNo")] Empleado empleado)
+
+        public async Task<IActionResult> Create([Bind("ID,Num_Legajo,Fecha_Inicio,Sector,Activo_oNo, persona")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
                 empleado.ID = Guid.NewGuid();
+                var personaEncontrada = await _context.Persona.FirstOrDefaultAsync(x => x.DNI == empleado.persona.DNI);
+                empleado.persona = personaEncontrada;
                 _context.Add(empleado);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -74,7 +81,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var empleado = await _context.Empleado.FindAsync(id);
+            var empleado = await _context.Empleado.Include(x=>x.persona).FirstOrDefaultAsync(e => e.ID == id);
             if (empleado == null)
             {
                 return NotFound();
@@ -87,7 +94,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Num_Legajo,Fecha_Inicio,Sector,Activo_oNo")] Empleado empleado)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Num_Legajo,Fecha_Inicio,Sector,Activo_oNo, persona")] Empleado empleado)
         {
             if (id != empleado.ID)
             {
@@ -98,6 +105,8 @@ namespace Club_Proyect.Controllers
             {
                 try
                 {
+                    //var personaEncontrada = await _context.Persona.FirstOrDefaultAsync(x => x.DNI == empleado.persona.DNI);
+                    //personaEncontrada = empleado.persona;
                     _context.Update(empleado);
                     await _context.SaveChangesAsync();
                 }

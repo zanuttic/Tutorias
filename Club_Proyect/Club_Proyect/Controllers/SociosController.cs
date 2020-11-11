@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
@@ -22,7 +23,7 @@ namespace Club_Proyect.Controllers
         // GET: Socios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Socio.ToListAsync());
+            return View(await _context.Socio.Include(x => x.persona).ToListAsync());
         }
 
         // GET: Socios/Details/5
@@ -33,7 +34,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var socio = await _context.Socio
+            var socio = await _context.Socio.Include(x => x.persona)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (socio == null)
             {
@@ -54,14 +55,19 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,NumSocio,FechaIngresoClub,Categoria,ActivoOno")] Socio socio)
+        //[Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> Create([Bind("ID,NumSocio,FechaIngresoClub,Categoria,ActivoOno, persona")] Socio socio)
         {
             if (ModelState.IsValid)
             {
                 socio.ID = Guid.NewGuid();
+                var personaEncontrada = await _context.Persona.FirstOrDefaultAsync(x => x.DNI == socio.persona.DNI);
+                socio.persona = personaEncontrada;
                 _context.Add(socio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
             return View(socio);
         }
@@ -74,7 +80,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var socio = await _context.Socio.FindAsync(id);
+            var socio = await _context.Socio.Include(x => x.persona).FirstOrDefaultAsync(e => e.ID == id);
             if (socio == null)
             {
                 return NotFound();
@@ -87,7 +93,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,NumSocio,FechaIngresoClub,Categoria,ActivoOno")] Socio socio)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,NumSocio,FechaIngresoClub,Categoria,ActivoOno, persona")] Socio socio)
         {
             if (id != socio.ID)
             {

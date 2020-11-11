@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Club_Proyect.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class VecinosController : Controller
     {
         private readonly ApplicationDbContext _context;

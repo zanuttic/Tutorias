@@ -27,6 +27,11 @@
                 <input asp-for="Categoria" class="form-control" />
                 <span asp-validation-for="Categoria" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="persona.DNI" class="control-label"></label>
+                <input asp-for="persona.DNI" class="form-control" />
+                <span asp-validation-for="persona.DNI" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ActivoOno" /> @Html.DisplayNameFor(model => model.ActivoOno)
