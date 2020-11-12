@@ -24,6 +24,28 @@
                 <span asp-validation-for="telefono" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="persona.DNI" class="control-label"></label>
+                <input asp-for="persona.DNI" class="form-control" />
+                <span asp-validation-for="persona.DNI" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="persona.Nombre" class="control-label"></label>
+                <input asp-for="persona.Nombre" class="form-control" />
+                <span asp-validation-for="persona.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="persona.Apellido" class="control-label"></label>
+                <input asp-for="persona.Apellido" class="form-control" />
+                <span asp-validation-for="persona.Apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="persona.Direccion" class="control-label"></label>
+                <input asp-for="persona.Direccion" class="form-control" />
+                <span asp-validation-for="persona.Direccion" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

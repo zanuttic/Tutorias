@@ -36,8 +36,8 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var vecino = await _context.Vecino
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var vecino = await _context.Vecino.Include(x => x.persona)
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (vecino == null)
             {
                 return NotFound();
@@ -78,7 +78,8 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var vecino = await _context.Vecino.FindAsync(id);
+            var vecino = await _context.Vecino.Include(x => x.persona)
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (vecino == null)
             {
                 return NotFound();
@@ -91,7 +92,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,telefono")] Vecino vecino)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,telefono, persona")] Vecino vecino)
         {
             if (id != vecino.Id)
             {
