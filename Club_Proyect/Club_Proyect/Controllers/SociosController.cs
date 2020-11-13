@@ -55,7 +55,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Create([Bind("ID,NumSocio,FechaIngresoClub,Categoria,ActivoOno, persona")] Socio socio)
         {
@@ -144,6 +144,7 @@ namespace Club_Proyect.Controllers
         // POST: Socios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var socio = await _context.Socio.FindAsync(id);

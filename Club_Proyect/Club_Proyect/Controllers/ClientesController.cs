@@ -164,6 +164,7 @@ namespace Club_Proyect.Controllers
         // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var cliente = await _context.Cliente.FindAsync(id);

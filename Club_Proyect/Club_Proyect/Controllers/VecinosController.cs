@@ -57,6 +57,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Nombre,telefono,persona")] Vecino vecino)
         {
             if (ModelState.IsValid)
@@ -143,6 +144,7 @@ namespace Club_Proyect.Controllers
         // POST: Vecinos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vecino = await _context.Vecino.FindAsync(id);
