@@ -69,14 +69,17 @@ namespace Club_Proyect.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                //instancia objeto User
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                //crea la instancia en base de datos de User con Password
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
                     //creamos un rol por defecto
-                    var rolCliente = _roleManager.FindByNameAsync("Cliente");
+                    var rolCliente = await _roleManager.FindByNameAsync("Cliente");
 
                     if (rolCliente == null)
                     {
