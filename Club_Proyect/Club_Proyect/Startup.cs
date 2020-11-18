@@ -65,6 +65,8 @@ namespace Club_Proyect
                 options.User.RequireUniqueEmail = false;
                 
             });
+
+            
         }
 
 

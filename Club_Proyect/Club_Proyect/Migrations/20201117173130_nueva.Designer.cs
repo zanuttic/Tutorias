@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201027171704_primerMigracion")]
-    partial class primerMigracion
+    [Migration("20201117173130_nueva")]
+    partial class nueva
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,22 @@ namespace Club_Proyect.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Club_Proyect.Entities.Deporte", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Activo");
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<string>("Nombre");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Deporte");
+                });
 
             modelBuilder.Entity("Club_Proyect.Entities.Vecino", b =>
                 {
@@ -38,6 +54,28 @@ namespace Club_Proyect.Migrations
                     b.HasIndex("personaID");
 
                     b.ToTable("Vecino");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.horario_Deporte", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Activo");
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("cantidad_Socios");
+
+                    b.Property<Guid?>("deporteID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("deporteID");
+
+                    b.ToTable("horario_Deporte");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entity.Cliente", b =>
@@ -117,9 +155,13 @@ namespace Club_Proyect.Migrations
 
                     b.Property<int>("NumSocio");
 
+                    b.Property<Guid?>("horario_DeporteID");
+
                     b.Property<Guid?>("personaID");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("horario_DeporteID");
 
                     b.HasIndex("personaID");
 
@@ -294,6 +336,13 @@ namespace Club_Proyect.Migrations
                         .HasForeignKey("personaID");
                 });
 
+            modelBuilder.Entity("Club_Proyect.Entities.horario_Deporte", b =>
+                {
+                    b.HasOne("Club_Proyect.Entities.Deporte", "deporte")
+                        .WithMany()
+                        .HasForeignKey("deporteID");
+                });
+
             modelBuilder.Entity("Club_Proyect.Entity.Cliente", b =>
                 {
                     b.HasOne("Club_Proyect.Entity.Persona", "persona")
@@ -310,6 +359,10 @@ namespace Club_Proyect.Migrations
 
             modelBuilder.Entity("Club_Proyect.Entity.Socio", b =>
                 {
+                    b.HasOne("Club_Proyect.Entities.horario_Deporte")
+                        .WithMany("socios")
+                        .HasForeignKey("horario_DeporteID");
+
                     b.HasOne("Club_Proyect.Entity.Persona", "persona")
                         .WithMany()
                         .HasForeignKey("personaID");
