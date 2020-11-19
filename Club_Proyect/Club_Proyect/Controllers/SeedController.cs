@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Club_Proyect.Data;
 using Club_Proyect.Entity;
 using Microsoft.AspNetCore.Identity;
+using Club_Proyect.Entities;
 
 namespace Club_Proyect.Controllers
 {
@@ -90,6 +91,28 @@ namespace Club_Proyect.Controllers
             };
             _context.Socio.Add(socio1);
             _context.Socio.Add(socio2);
+            var deporte1 = new Deporte()
+            {
+                Nombre ="futbol",
+                Descripcion = "futbol 5",
+                 Activo = true, 
+                  ID = Guid.NewGuid()
+            };
+            var horario_deporte = new horario_Deporte()
+            {
+                ID = Guid.NewGuid(),
+                Nombre = "futbol martes",
+                Descripcion = "martes de 19 a 21hs",
+                 deporte = deporte1,
+                  cantidad_Socios = 5,
+                socios = new List<Socio>
+                {
+                    socio1,socio2
+                }
+            };
+
+            _context.Deporte.Add(deporte1);
+            _context.horario_Deporte.Add(horario_deporte);
 
             await _context.SaveChangesAsync();
 
