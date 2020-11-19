@@ -45,9 +45,55 @@ namespace Club_Proyect.Controllers
             await _userManager.AddToRoleAsync(user, "Admin");
 
             //crear 02 instancia de persona
-            //crear 02 instancia de Socio con la persona creada
+            var persona1 = new Persona()
+            {
+                ID = Guid.NewGuid(),    
+                Nombre = "ivan",
+                Apellido = "kopech",
+                Direccion = "su casa",
+                DNI = 42327447,
+                FechaNacimiento = DateTime.Now,
+                Activo = true,
+            };
+            var persona2 = new Persona()
+            {
+                ID = Guid.NewGuid(),
+                Nombre = "mati",
+                Apellido = "kopech",
+                Direccion = "su casa",
+                DNI = 42327555,
+                FechaNacimiento = DateTime.Now,
+                Activo = true,
+            };
+            _context.Persona.Add(persona1);
+            _context.Persona.Add(persona2);
 
-            //return await _context.Persona.ToListAsync();
+            var socio1 = new Socio()
+            {
+                ID = Guid.NewGuid(),
+                persona = persona1,
+                NumSocio = 1,
+                FechaIngresoClub = DateTime.Now,
+                Categoria = 1,
+                ActivoOno = true,
+
+            };
+            var socio2 = new Socio()
+            {
+                ID = Guid.NewGuid(),
+                persona = persona2,
+                NumSocio = 2,
+                FechaIngresoClub = DateTime.Now,
+                Categoria = 1,
+                ActivoOno = true,
+
+            };
+            _context.Socio.Add(socio1);
+            _context.Socio.Add(socio2);
+
+            await _context.SaveChangesAsync();
+
+            
             return null;
         }
 
