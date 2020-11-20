@@ -34,8 +34,14 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var horario_Deporte = await _context.horario_Deporte.Include(x => x.deporte)
+            var horario_Deporte = await _context.horario_Deporte
+                .Include(x => x.deporte)
+                .Include(s=>s.socios)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+
+
+
             if (horario_Deporte == null)
             {
                 return NotFound();

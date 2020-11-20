@@ -15,7 +15,7 @@ namespace Club_Proyect.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -157,9 +157,13 @@ namespace Club_Proyect.Migrations
 
                     b.Property<int>("NumSocio");
 
+                    b.Property<Guid?>("horario_DeporteID");
+
                     b.Property<Guid?>("personaID");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("horario_DeporteID");
 
                     b.HasIndex("personaID");
 
@@ -361,6 +365,10 @@ namespace Club_Proyect.Migrations
 
             modelBuilder.Entity("Club_Proyect.Entity.Socio", b =>
                 {
+                    b.HasOne("Club_Proyect.Entities.horario_Deporte")
+                        .WithMany("socios")
+                        .HasForeignKey("horario_DeporteID");
+
                     b.HasOne("Club_Proyect.Entity.Persona", "persona")
                         .WithMany()
                         .HasForeignKey("personaID");

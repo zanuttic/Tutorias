@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Club_Proyect.Migrations
 {
-    public partial class mati : Migration
+    public partial class base1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -228,28 +228,6 @@ namespace Club_Proyect.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Socio",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    personaID = table.Column<Guid>(nullable: true),
-                    NumSocio = table.Column<int>(nullable: false),
-                    FechaIngresoClub = table.Column<DateTime>(nullable: false),
-                    Categoria = table.Column<int>(nullable: false),
-                    ActivoOno = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Socio", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Socio_Persona_personaID",
-                        column: x => x.personaID,
-                        principalTable: "Persona",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Vecino",
                 columns: table => new
                 {
@@ -291,10 +269,33 @@ namespace Club_Proyect.Migrations
                         principalTable: "Deporte",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Socio",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    personaID = table.Column<Guid>(nullable: true),
+                    NumSocio = table.Column<int>(nullable: false),
+                    FechaIngresoClub = table.Column<DateTime>(nullable: false),
+                    Categoria = table.Column<int>(nullable: false),
+                    ActivoOno = table.Column<bool>(nullable: false),
+                    horario_DeporteID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Socio", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_horario_Deporte_Socio_socioID",
-                        column: x => x.socioID,
-                        principalTable: "Socio",
+                        name: "FK_Socio_horario_Deporte_horario_DeporteID",
+                        column: x => x.horario_DeporteID,
+                        principalTable: "horario_Deporte",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Socio_Persona_personaID",
+                        column: x => x.personaID,
+                        principalTable: "Persona",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -359,6 +360,11 @@ namespace Club_Proyect.Migrations
                 column: "socioID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Socio_horario_DeporteID",
+                table: "Socio",
+                column: "horario_DeporteID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Socio_personaID",
                 table: "Socio",
                 column: "personaID");
@@ -367,10 +373,30 @@ namespace Club_Proyect.Migrations
                 name: "IX_Vecino_personaID",
                 table: "Vecino",
                 column: "personaID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_horario_Deporte_Socio_socioID",
+                table: "horario_Deporte",
+                column: "socioID",
+                principalTable: "Socio",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Socio_Persona_personaID",
+                table: "Socio");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_horario_Deporte_Deporte_deporteID",
+                table: "horario_Deporte");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_horario_Deporte_Socio_socioID",
+                table: "horario_Deporte");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -393,9 +419,6 @@ namespace Club_Proyect.Migrations
                 name: "Empleado");
 
             migrationBuilder.DropTable(
-                name: "horario_Deporte");
-
-            migrationBuilder.DropTable(
                 name: "Vecino");
 
             migrationBuilder.DropTable(
@@ -405,13 +428,16 @@ namespace Club_Proyect.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Persona");
+
+            migrationBuilder.DropTable(
                 name: "Deporte");
 
             migrationBuilder.DropTable(
                 name: "Socio");
 
             migrationBuilder.DropTable(
-                name: "Persona");
+                name: "horario_Deporte");
         }
     }
 }

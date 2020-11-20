@@ -10,7 +10,7 @@ namespace Club_Proyect.Entities
 {
     public class horario_Deporte
     {
-        public horario_Deporte() { socios = new List<Socio>(); }
+        //public horario_Deporte() { socios = new List<Socio>(); }
         [Key]
         public Guid ID { get; set; }
         public string Nombre { get; set; }
@@ -18,7 +18,8 @@ namespace Club_Proyect.Entities
         public int cantidad_Socios { get; set; }
         public bool Activo { get; set; }
         public Deporte deporte { get; set; }
-        public List<Socio> socios;
+
+        public List<Socio> socios { get; set; }
         public Socio socio { get; set; }
     }
 }
