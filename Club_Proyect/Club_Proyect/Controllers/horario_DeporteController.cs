@@ -37,10 +37,8 @@ namespace Club_Proyect.Controllers
             var horario_Deporte = await _context.horario_Deporte
                 .Include(x => x.deporte)
                 .Include(s=>s.socios)
+                .Include("socios.persona")
                 .FirstOrDefaultAsync(m => m.ID == id);
-
-
-
 
             if (horario_Deporte == null)
             {
