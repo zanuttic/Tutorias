@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201124170948_seed")]
-    partial class seed
+    [Migration("20201120172622_mati")]
+    partial class mati
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

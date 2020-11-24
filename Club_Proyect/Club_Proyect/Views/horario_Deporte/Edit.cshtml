@@ -9,13 +9,6 @@
 <h4>horario_Deporte</h4>
 <hr />
 <div class="row">
-
-    @if (Model.error)
-    {
-    <label asp-for="mensaje" class="control-label"></label>
-    <input asp-for="mensaje" class="form-control" disabled ="disabled" />
-    }
-
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -129,24 +129,14 @@ namespace Club_Proyect.Controllers
             {
                 try
                 {
-                    var horario_Deporte1 = await _context.horario_Deporte
-                .Include(x => x.deporte)
-                .Include(s => s.socios)
-                .Include("socios.persona")
-                .FirstOrDefaultAsync(m => m.ID == id);
-                    //horario_Deporte.socios = horario_Deporte1.socios;
-
                     var socioNuevo = _context.Socio.FirstOrDefault(x => x.NumSocio == horario_Deporte.socio.NumSocio);
                     var cantSocio = horario_Deporte.cantidad_Socios;
-                    if (cantSocio <= horario_Deporte1.socios.Count)
+                    if (cantSocio <= horario_Deporte.socios.Count)
                     {
-                        horario_Deporte.error = true;
-                        horario_Deporte.mensaje = string.Format("Maximo de socios alcanzado para este horario, cantidad de socios: {0}" , cantSocio);
-                        return View(horario_Deporte); 
+                        return NotFound();
                     }
-                    //horario_Deporte.socios = new List<Socio>();
-                    horario_Deporte1.socios.Add(socioNuevo);
-                    //_context.Update(horario_Deporte);
+                    horario_Deporte.socios.Add(socioNuevo);
+                    _context.Update(horario_Deporte);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
