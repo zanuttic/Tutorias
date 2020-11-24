@@ -8,6 +8,7 @@ namespace Club_Proyect.Entities
 {
     public class Deporte
     {
+
         [Key]
         public Guid ID { get; set; }
         public string Nombre { get; set; }
