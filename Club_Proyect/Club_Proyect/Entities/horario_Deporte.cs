@@ -21,5 +21,11 @@ namespace Club_Proyect.Entities
 
         public List<Socio> socios { get; set; }
         public Socio socio { get; set; }
+
+        [NotMapped]
+        public bool error { get; set; }
+
+        [NotMapped]
+        public string mensaje { get; set; }
     }
 }
