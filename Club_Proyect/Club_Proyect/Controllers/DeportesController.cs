@@ -22,7 +22,7 @@ namespace Club_Proyect.Controllers
         // GET: Deportes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Deporte.ToListAsync());
+            return View(await _context.Deporte.Where(d => d.Activo == true).ToListAsync());
         }
 
         // GET: Deportes/Details/5
@@ -141,7 +141,18 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var deporte = await _context.Deporte.FindAsync(id);
-            _context.Deporte.Remove(deporte);
+
+            var horario_dep = await _context.horario_Deporte.Where(d => d.Activo == true && d.deporte.ID == id).ToListAsync();
+            if (horario_dep.Any())
+            {
+                deporte.error = true;
+                deporte.mensaje = string.Format("Hay un horario asociado a este deporte - {0}", horario_dep[0].Nombre);
+                return View(deporte);
+            }
+
+            deporte.Activo = false;
+
+            //_context.Deporte.Remove(deporte);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

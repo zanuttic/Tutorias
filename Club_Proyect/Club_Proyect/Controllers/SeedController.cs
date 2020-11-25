@@ -103,12 +103,14 @@ namespace Club_Proyect.Controllers
                 ID = Guid.NewGuid(),
                 Nombre = "futbol martes",
                 Descripcion = "martes de 19 a 21hs",
-                 deporte = deporte1,
-                  cantidad_Socios = 5,
+                deporte = deporte1,
+                cantidad_Socios = 5,
+                Activo = true,  
                 socios = new List<Socio>
                 {
                     socio1,socio2
                 }
+                
             };
 
             _context.Deporte.Add(deporte1);

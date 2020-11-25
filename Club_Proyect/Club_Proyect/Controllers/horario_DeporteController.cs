@@ -23,7 +23,7 @@ namespace Club_Proyect.Controllers
         // GET: horario_Deporte
         public async Task<IActionResult> Index()
         {
-            return View(await _context.horario_Deporte.Include(x => x.deporte).ToListAsync());
+            return View(await _context.horario_Deporte.Where(d => d.Activo == true).Include(x => x.deporte).ToListAsync());
         }
 
         // GET: horario_Deporte/Details/5
@@ -187,7 +187,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var horario_Deporte = await _context.horario_Deporte.FindAsync(id);
-            _context.horario_Deporte.Remove(horario_Deporte);
+            horario_Deporte.Activo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
