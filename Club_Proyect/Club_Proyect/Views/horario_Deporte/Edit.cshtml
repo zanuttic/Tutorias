@@ -10,13 +10,14 @@
 <hr />
 <div class="row">
 
-    @if (Model.error)
-    {
-        <label asp-for="mensaje" class="control-label"></label>
-        <input asp-for="mensaje" class="form-control" disabled="disabled" />
-    }
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <form asp-action="Edit">
+        <div class="col-md-12">
+            @if (Model.error)
+            {
+                <label asp-for="mensaje" class="text-danger">@Model.mensaje</label>
+                //<input asp-for="mensaje" class="form-control" disabled="disabled" />
+            }
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
@@ -29,6 +30,8 @@
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="cantidad_Socios" class="control-label"></label>
                 <input asp-for="cantidad_Socios" class="form-control" />
@@ -53,8 +56,9 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>
 
 <div>
