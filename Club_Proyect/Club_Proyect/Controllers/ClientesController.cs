@@ -23,7 +23,7 @@ namespace Club_Proyect.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            var listaCliente = _context.Cliente.Where(c => c.Saldo > 50).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+            var listaCliente = _context.Cliente.Where(s=>s.Activo_oNo==true).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
 
             return View(await _context.Cliente.ToListAsync());
         }
@@ -66,16 +66,20 @@ namespace Club_Proyect.Controllers
                 var persona = _context.Persona.FirstOrDefault(x => x.DNI == cliente.persona.DNI);
                 if (persona == null)
                 {
-                    return NotFound();
+                    cliente.error = true;
+                    cliente.mensaje = string.Format("la persona con dni:{0} no existe", cliente.persona.DNI);
+                    return View(cliente);
                 }
                 var personaid = persona.ID;
                 var clientetemp = _context.Cliente.FirstOrDefault(x => x.persona.ID == personaid);
                 if (clientetemp != null)
                 {
-                    return NotFound();
+                    cliente.error = true;
+                    cliente.mensaje = string.Format("la persona con dni:{0} ya existe como cliente numero {1} ", cliente.persona.DNI,clientetemp.Num_Cliente);
+                    return View(cliente);
                 }
 
-
+                cliente.Activo_oNo = true;
                 cliente.persona.Nombre = persona.Nombre;
                 cliente.persona.Apellido = persona.Apellido;
                 cliente.persona.Direccion = persona.Direccion;
@@ -168,7 +172,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var cliente = await _context.Cliente.FindAsync(id);
-            _context.Cliente.Remove(cliente);
+            cliente.Activo_oNo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

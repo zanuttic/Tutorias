@@ -16,5 +16,10 @@ namespace Club_Proyect.Entity
         public int Num_Cliente { get; set; }
         public double Saldo { get; set; }
         public bool Activo_oNo { get; set; }
+        [NotMapped]
+        public bool error { get; set; }
+
+        [NotMapped]
+        public string mensaje { get; set; }
     }
 }
