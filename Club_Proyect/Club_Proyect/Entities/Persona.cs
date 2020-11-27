@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,12 @@ namespace Club_Proyect.Entity
         public string Direccion { get; set; }
 
         public bool Activo { get; set; }
+
+        [NotMapped]
+        public bool error { get; set; }
+
+        [NotMapped]
+        public string mensaje { get; set; }
 
 
 

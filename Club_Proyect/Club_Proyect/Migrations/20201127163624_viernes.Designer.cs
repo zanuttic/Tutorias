@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201125172805_primerMigracion")]
-    partial class primerMigracion
+    [Migration("20201127163624_viernes")]
+    partial class viernes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,8 @@ namespace Club_Proyect.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Activo");
 
                     b.Property<string>("Nombre");
 

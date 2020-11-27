@@ -41,6 +41,8 @@ namespace Club_Proyect.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Activo");
+
                     b.Property<string>("Nombre");
 
                     b.Property<Guid?>("personaID");

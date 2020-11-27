@@ -25,7 +25,8 @@ namespace Club_Proyect.Controllers
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Empleado.Include(x=> x.persona).ToListAsync());
+            var listaEmpleado = await _context.Empleado.Where(s => s.Activo_oNo == true).Include(x=> x.persona).ToListAsync();
+            return View(listaEmpleado);
         }
 
         // GET: Empleados/Details/5
@@ -66,6 +67,7 @@ namespace Club_Proyect.Controllers
                 empleado.ID = Guid.NewGuid();
                 var personaEncontrada = await _context.Persona.FirstOrDefaultAsync(x => x.DNI == empleado.persona.DNI);
                 empleado.persona = personaEncontrada;
+                empleado.Activo_oNo = true;
                 _context.Add(empleado);
 
                 await _context.SaveChangesAsync();
@@ -135,8 +137,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var empleado = await _context.Empleado
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var empleado = await _context.Empleado.Include(x => x.persona).FirstOrDefaultAsync(e => e.ID == id);
             if (empleado == null)
             {
                 return NotFound();
@@ -152,7 +153,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var empleado = await _context.Empleado.FindAsync(id);
-            _context.Empleado.Remove(empleado);
+            empleado.Activo_oNo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -25,7 +25,7 @@ namespace Club_Proyect.Controllers
         // GET: Vecinos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vecino.Include(p => p.persona).ToListAsync());
+            return View(await _context.Vecino.Where(s => s.Activo == true).Include(p => p.persona).ToListAsync());
         }
 
         // GET: Vecinos/Details/5
@@ -64,6 +64,7 @@ namespace Club_Proyect.Controllers
             {
                 var personaencontrada = _context.Persona.FirstOrDefault(p => p.DNI == vecino.persona.DNI);
                 vecino.persona = personaencontrada;
+                vecino.Activo = true;
                 _context.Add(vecino);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -131,8 +132,8 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var vecino = await _context.Vecino
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var vecino = await _context.Vecino.Include(x => x.persona)
+               .FirstOrDefaultAsync(m => m.Id == id);
             if (vecino == null)
             {
                 return NotFound();
@@ -148,7 +149,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vecino = await _context.Vecino.FindAsync(id);
-            _context.Vecino.Remove(vecino);
+            vecino.Activo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

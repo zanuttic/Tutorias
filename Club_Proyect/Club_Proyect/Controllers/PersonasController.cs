@@ -24,7 +24,7 @@ namespace Club_Proyect.Controllers
         // GET: Personas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persona.ToListAsync());
+            return View(await _context.Persona.Where(s => s.Activo == true).ToListAsync());
         }
 
         // GET: Personas/Details/5
@@ -61,6 +61,7 @@ namespace Club_Proyect.Controllers
             if (ModelState.IsValid)
             {
                 persona.ID = Guid.NewGuid();
+                persona.Activo = true;
                 _context.Add(persona);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -143,7 +144,35 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var persona = await _context.Persona.FindAsync(id);
-            _context.Persona.Remove(persona);
+            var cliente = await _context.Cliente.Where(d => d.Activo_oNo == true && d.persona.ID == id).ToListAsync();
+            if (cliente.Any())
+            {
+                persona.error = true;
+                persona.mensaje = string.Format("El cliente {0} esta asociado a esta persona, ", cliente[0].Num_Cliente);
+                return View(persona);
+            }
+            var socio = await _context.Socio.Where(d => d.ActivoOno == true && d.persona.ID == id).ToListAsync();
+            if (socio.Any())
+            {
+                persona.error = true;
+                persona.mensaje = string.Format("El socio {0} esta asociado a esta persona, ", socio[0].NumSocio);
+                return View(persona);
+            }
+            var vecino = await _context.Vecino.Where(d => d.Activo == true && d.persona.ID == id).ToListAsync();
+            if (vecino.Any())
+            {
+                persona.error = true;
+                persona.mensaje = string.Format("El vecino {0} esta asociado a esta persona, ", vecino[0].Nombre);
+                return View(persona);
+            }
+            var empleado = await _context.Empleado.Where(d => d.Activo_oNo == true && d.persona.ID == id).ToListAsync();
+            if (empleado.Any())
+            {
+                persona.error = true;
+                persona.mensaje = string.Format("El empleado {0} esta asociado a esta persona, ", empleado[0].Num_Legajo);
+                return View(persona);
+            }
+            persona.Activo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

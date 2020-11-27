@@ -23,7 +23,9 @@ namespace Club_Proyect.Controllers
         // GET: Socios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Socio.Include(x => x.persona).ToListAsync());
+            var listaSocio = await _context.Socio.Where(s => s.ActivoOno == true).Include(x => x.persona).ToListAsync(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+
+            return View(listaSocio);
         }
 
         // GET: Socios/Details/5
@@ -64,7 +66,8 @@ namespace Club_Proyect.Controllers
                 socio.ID = Guid.NewGuid();
                 var personaEncontrada = await _context.Persona.FirstOrDefaultAsync(x => x.DNI == socio.persona.DNI);
                 socio.persona = personaEncontrada;
-                _context.Add(socio);
+                socio.ActivoOno = true;
+                _context.Socio.Add(socio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
 
@@ -131,8 +134,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var socio = await _context.Socio
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var socio = await _context.Socio.Include(x => x.persona).FirstOrDefaultAsync(e => e.ID == id);
             if (socio == null)
             {
                 return NotFound();
@@ -148,7 +150,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var socio = await _context.Socio.FindAsync(id);
-            _context.Socio.Remove(socio);
+            socio.ActivoOno = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

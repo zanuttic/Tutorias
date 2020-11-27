@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Club_Proyect.Migrations
 {
-    public partial class primerMigracion : Migration
+    public partial class viernes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -235,7 +235,8 @@ namespace Club_Proyect.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     personaID = table.Column<Guid>(nullable: true),
                     Nombre = table.Column<string>(nullable: true),
-                    telefono = table.Column<string>(nullable: true)
+                    telefono = table.Column<string>(nullable: true),
+                    Activo = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

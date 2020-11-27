@@ -28,11 +28,11 @@
                 <input asp-for="Categoria" class="form-control" />
                 <span asp-validation-for="Categoria" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            @*<div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ActivoOno" /> @Html.DisplayNameFor(model => model.ActivoOno)
                 </label>
-            </div>
+            </div>*@
             <input type="hidden" asp-for="persona.ID" />
             <div class="form-group">
                 <label asp-for="persona.Nombre" class="control-label"></label>
@@ -59,11 +59,11 @@
                 <input asp-for="persona.FechaNacimiento" class="form-control" />
                 <span asp-validation-for="persona.FechaNacimiento" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="persona.Activo" class="control-label"></label>
                 <input asp-for="persona.Activo" class="form-control" />
                 <span asp-validation-for="persona.Activo" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
