@@ -27,9 +27,9 @@ namespace Club_Proyect.Entity
         public bool error { get; set; }
 
         [NotMapped]
-        public string mensaje { get; set; }
+        public List<string> mensaje { get; set; }
 
-
+        public Persona() { mensaje =new List<string>(); }
 
     }
 }
