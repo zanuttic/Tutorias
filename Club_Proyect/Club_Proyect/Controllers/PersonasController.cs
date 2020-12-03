@@ -148,28 +148,28 @@ namespace Club_Proyect.Controllers
             if (cliente.Any())
             {
                 persona.error = true;
-                persona.mensaje.Add(string.Format("El cliente {0} esta asociado a esta persona, ", cliente[0].Num_Cliente));
+                persona.mensaje.Add(string.Format("El cliente {0} esta asociado a esta persona. ", cliente[0].Num_Cliente));
                 
             }
             var socio = await _context.Socio.Where(d => d.ActivoOno == true && d.persona.ID == id).ToListAsync();
             if (socio.Any())
             {
                 persona.error = true;
-                persona.mensaje.Add(string.Format("El socio {0} esta asociado a esta persona, ", socio[0].NumSocio));
+                persona.mensaje.Add(string.Format("El socio {0} esta asociado a esta persona. ", socio[0].NumSocio));
                 
             }
             var vecino = await _context.Vecino.Where(d => d.Activo == true && d.persona.ID == id).ToListAsync();
             if (vecino.Any())
             {
                 persona.error = true;
-                persona.mensaje.Add(string.Format("El vecino {0} esta asociado a esta persona, ", vecino[0].Nombre));
+                persona.mensaje.Add(string.Format("El vecino {0} esta asociado a esta persona. ", vecino[0].Nombre));
                 
             }
             var empleado = await _context.Empleado.Where(d => d.Activo_oNo == true && d.persona.ID == id).ToListAsync();
             if (empleado.Any())
             {
                 persona.error = true;
-                persona.mensaje.Add(string.Format("El empleado {0} esta asociado a esta persona, ", empleado[0].Num_Legajo));
+                persona.mensaje.Add(string.Format("El empleado {0} esta asociado a esta persona. ", empleado[0].Num_Legajo));
                 
             }
             if (persona.error) return View(persona);

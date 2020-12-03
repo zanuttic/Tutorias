@@ -13,12 +13,36 @@
 
     @if (Model.error)
     {
-        <label asp-for="mensaje" class="text-danger">@Model.mensaje</label>
-        foreach (var item in Model.mensaje)
-        {
-<label asp-for="mensaje" class="text-danger">@item</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <h4>
+                            Error al querer eliminar:
+                        </h4>
+
+                    </th>
+
+                </tr>
+
+            </thead>
+            <tbody>
+
+
+            
+            @foreach (var item in Model.mensaje)
+            {
+            
+                <tr>
+                    <td>
+                        <label asp-for="mensaje" class="text-danger">@item</label>
+                    </td>
+                </tr>
+            }
+              </tbody>
+        </table>
         }
-    }
+
 
     <dl class="row">
         <dt class="col-sm-2">
