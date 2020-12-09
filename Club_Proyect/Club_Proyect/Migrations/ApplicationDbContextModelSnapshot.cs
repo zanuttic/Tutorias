@@ -15,9 +15,29 @@ namespace Club_Proyect.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Club_Proyect.Entities.Bufet", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Horario");
+
+                    b.Property<Guid?>("clienteID");
+
+                    b.Property<Guid?>("ventaID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("clienteID");
+
+                    b.HasIndex("ventaID");
+
+                    b.ToTable("Bufet");
+                });
 
             modelBuilder.Entity("Club_Proyect.Entities.Deporte", b =>
                 {
@@ -33,6 +53,26 @@ namespace Club_Proyect.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Deporte");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Productos", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Costo");
+
+                    b.Property<double>("Ganancia");
+
+                    b.Property<double>("Impuesto");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("Stock");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entities.Vecino", b =>
@@ -54,6 +94,24 @@ namespace Club_Proyect.Migrations
                     b.HasIndex("personaID");
 
                     b.ToTable("Vecino");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Venta", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Fecha");
+
+                    b.Property<double>("Renta");
+
+                    b.Property<string>("metodoPago");
+
+                    b.Property<double>("totalVenta");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Venta");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entities.horario_Deporte", b =>
@@ -331,6 +389,17 @@ namespace Club_Proyect.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Bufet", b =>
+                {
+                    b.HasOne("Club_Proyect.Entity.Cliente", "cliente")
+                        .WithMany()
+                        .HasForeignKey("clienteID");
+
+                    b.HasOne("Club_Proyect.Entities.Venta", "venta")
+                        .WithMany()
+                        .HasForeignKey("ventaID");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entities.Vecino", b =>

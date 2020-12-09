@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Club_Proyect.Migrations
 {
-    public partial class primeramigra : Migration
+    public partial class primerMigracion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,37 @@ namespace Club_Proyect.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Persona", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Productos",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Nombre = table.Column<string>(nullable: true),
+                    Stock = table.Column<int>(nullable: false),
+                    Costo = table.Column<double>(nullable: false),
+                    Impuesto = table.Column<double>(nullable: false),
+                    Ganancia = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Productos", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Venta",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    metodoPago = table.Column<string>(nullable: true),
+                    Renta = table.Column<double>(nullable: false),
+                    totalVenta = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Venta", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,6 +281,32 @@ namespace Club_Proyect.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bufet",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    clienteID = table.Column<Guid>(nullable: true),
+                    Horario = table.Column<DateTime>(nullable: false),
+                    ventaID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bufet", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Bufet_Cliente_clienteID",
+                        column: x => x.clienteID,
+                        principalTable: "Cliente",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bufet_Venta_ventaID",
+                        column: x => x.ventaID,
+                        principalTable: "Venta",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "horario_Deporte",
                 columns: table => new
                 {
@@ -341,6 +398,16 @@ namespace Club_Proyect.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bufet_clienteID",
+                table: "Bufet",
+                column: "clienteID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bufet_ventaID",
+                table: "Bufet",
+                column: "ventaID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cliente_personaID",
                 table: "Cliente",
                 column: "personaID");
@@ -414,10 +481,13 @@ namespace Club_Proyect.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Bufet");
 
             migrationBuilder.DropTable(
                 name: "Empleado");
+
+            migrationBuilder.DropTable(
+                name: "Productos");
 
             migrationBuilder.DropTable(
                 name: "Vecino");
@@ -427,6 +497,12 @@ namespace Club_Proyect.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Venta");
 
             migrationBuilder.DropTable(
                 name: "Persona");

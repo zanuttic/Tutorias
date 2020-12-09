@@ -27,6 +27,8 @@ namespace Club_Proyect.Data
         public DbSet<Club_Proyect.Entities.Vecino> Vecino { get; set; }
         public DbSet<Club_Proyect.Entities.Deporte> Deporte { get; set; }
         public DbSet<Club_Proyect.Entities.horario_Deporte> horario_Deporte { get; set; }
+        public DbSet<Club_Proyect.Entities.Bufet> Bufet { get; set; }
+        public DbSet<Club_Proyect.Entities.Productos> Productos { get; set; }
 
     }
 }

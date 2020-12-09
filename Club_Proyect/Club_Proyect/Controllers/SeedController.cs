@@ -112,9 +112,36 @@ namespace Club_Proyect.Controllers
                 }
                 
             };
+            
 
             _context.Deporte.Add(deporte1);
             _context.horario_Deporte.Add(horario_deporte);
+
+          
+
+          
+            _context.Productos.AddRange(
+            new Productos()
+            {
+                ID = Guid.NewGuid(),
+                Nombre = "Coca-Cola",
+                Stock = 100,
+                Costo = 50,
+                Impuesto = 21,
+                Ganancia = 30
+
+            },
+            new Productos()
+            {
+                ID = Guid.NewGuid(),
+                Nombre = "Sandwich",
+                Stock = 200,
+                Costo = 60,
+                Impuesto = 21,
+                Ganancia = 40
+
+            }
+            );
 
             await _context.SaveChangesAsync();
 
