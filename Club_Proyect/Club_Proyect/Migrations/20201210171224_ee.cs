@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Club_Proyect.Migrations
 {
-    public partial class primerMigracion : Migration
+    public partial class ee : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

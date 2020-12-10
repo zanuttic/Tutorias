@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201209174634_primerMigracion")]
-    partial class primerMigracion
+    [Migration("20201210171224_ee")]
+    partial class ee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

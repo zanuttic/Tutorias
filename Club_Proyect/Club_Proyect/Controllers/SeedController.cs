@@ -45,7 +45,9 @@ namespace Club_Proyect.Controllers
             //asignarle al usuario el rol Admin
             await _userManager.AddToRoleAsync(user, "Admin");
 
-            //crear 02 instancia de persona
+
+           //crear 02 instancia de persona
+
             var persona1 = new Persona()
             {
                 ID = Guid.NewGuid(),    
@@ -68,6 +70,16 @@ namespace Club_Proyect.Controllers
             };
             _context.Persona.Add(persona1);
             _context.Persona.Add(persona2);
+
+            var cliente1 = new Cliente()
+            {
+                ID = Guid.NewGuid(),
+                Num_Cliente = 1,
+                Saldo = 100,
+                persona = persona1,
+                Activo_oNo = true,
+            };
+            _context.Cliente.Add(cliente1);
 
             var socio1 = new Socio()
             {

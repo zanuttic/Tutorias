@@ -10,22 +10,23 @@ using Club_Proyect.Entities;
 
 namespace Club_Proyect.Controllers
 {
-    public class BufetsController : Controller
+    public class VentasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public BufetsController(ApplicationDbContext context)
+        public VentasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Bufets
+        // GET: Ventas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bufet.Include(x => x.venta).ToListAsync());
+            
+            return View(await _context.Venta.ToListAsync());
         }
 
-        // GET: Bufets/Details/5
+        // GET: Ventas/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -33,40 +34,42 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var bufet = await _context.Bufet
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (bufet == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(bufet);
+            return View(venta);
         }
 
-        // GET: Bufets/Create
+        // GET: Ventas/Create
         public IActionResult Create()
         {
+            var listaProducto = _context.Productos.ToList();
+            ViewData["productos"] = listaProducto;
             return View();
         }
 
-        // POST: Bufets/Create
+        // POST: Ventas/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Horario")] Bufet bufet)
+        public async Task<IActionResult> Create([Bind("ID,Fecha,metodoPago,Renta,totalVenta")] Venta venta)
         {
             if (ModelState.IsValid)
             {
-                bufet.ID = Guid.NewGuid();
-                _context.Add(bufet);
+                venta.ID = Guid.NewGuid();
+                _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(bufet);
+            return View(venta);
         }
 
-        // GET: Bufets/Edit/5
+        // GET: Ventas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -74,22 +77,22 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var bufet = await _context.Bufet.FindAsync(id);
-            if (bufet == null)
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta == null)
             {
                 return NotFound();
             }
-            return View(bufet);
+            return View(venta);
         }
 
-        // POST: Bufets/Edit/5
+        // POST: Ventas/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Horario")] Bufet bufet)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Fecha,metodoPago,Renta,totalVenta")] Venta venta)
         {
-            if (id != bufet.ID)
+            if (id != venta.ID)
             {
                 return NotFound();
             }
@@ -98,12 +101,12 @@ namespace Club_Proyect.Controllers
             {
                 try
                 {
-                    _context.Update(bufet);
+                    _context.Update(venta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BufetExists(bufet.ID))
+                    if (!VentaExists(venta.ID))
                     {
                         return NotFound();
                     }
@@ -114,10 +117,10 @@ namespace Club_Proyect.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(bufet);
+            return View(venta);
         }
 
-        // GET: Bufets/Delete/5
+        // GET: Ventas/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -125,30 +128,30 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var bufet = await _context.Bufet
+            var venta = await _context.Venta
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (bufet == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return View(bufet);
+            return View(venta);
         }
 
-        // POST: Bufets/Delete/5
+        // POST: Ventas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var bufet = await _context.Bufet.FindAsync(id);
-            _context.Bufet.Remove(bufet);
+            var venta = await _context.Venta.FindAsync(id);
+            _context.Venta.Remove(venta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BufetExists(Guid id)
+        private bool VentaExists(Guid id)
         {
-            return _context.Bufet.Any(e => e.ID == id);
+            return _context.Venta.Any(e => e.ID == id);
         }
     }
 }

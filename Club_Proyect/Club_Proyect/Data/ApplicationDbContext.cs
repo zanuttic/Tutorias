@@ -29,6 +29,7 @@ namespace Club_Proyect.Data
         public DbSet<Club_Proyect.Entities.horario_Deporte> horario_Deporte { get; set; }
         public DbSet<Club_Proyect.Entities.Bufet> Bufet { get; set; }
         public DbSet<Club_Proyect.Entities.Productos> Productos { get; set; }
+        public DbSet<Club_Proyect.Entities.Venta> Venta { get; set; }
 
     }
 }
