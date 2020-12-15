@@ -61,7 +61,10 @@ namespace Club_Proyect.Controllers
         {
             if (ModelState.IsValid)
             {
+                var prodid = new Guid(venta.Prod);
+                var producto = _context.Productos.FirstOrDefault(p=>p.ID==prodid);
                 venta.ID = Guid.NewGuid();
+                venta.productos = producto;
                 _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
