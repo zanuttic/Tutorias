@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    var listaProductos = ViewData["productos"] as List<Club_Proyect.Entities.Productos>;
+    var listaProductos = ViewBag.productos;
 }
 
 <h1>Create</h1>
@@ -20,8 +20,7 @@
             </div>
             <div class="form-group">
 
-                <select asp-for="producto" asp-items="@(new SelectListItem(listaProductos, "", ""))></select>
-
+                <select asp-for="Prod" class="form-control" asp-items='new SelectList(listaProductos,"ID","Nombre")'></select>
             </div>
             <div class="form-group">
                 <label asp-for="metodoPago" class="control-label"></label>

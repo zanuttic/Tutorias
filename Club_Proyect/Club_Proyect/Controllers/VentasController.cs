@@ -48,7 +48,7 @@ namespace Club_Proyect.Controllers
         public IActionResult Create()
         {
             var listaProducto = _context.Productos.ToList();
-            ViewData["productos"] = listaProducto;
+            ViewBag.productos = listaProducto;
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Fecha,metodoPago,Renta,totalVenta")] Venta venta)
+        public async Task<IActionResult> Create([Bind("ID,Fecha,metodoPago,Renta,totalVenta,Prod")] Venta venta)
         {
             if (ModelState.IsValid)
             {
