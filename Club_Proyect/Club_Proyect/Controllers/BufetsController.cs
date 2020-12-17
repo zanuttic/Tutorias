@@ -54,14 +54,21 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Horario")] Bufet bufet)
+        public async Task<IActionResult> Create([Bind("ID,Horario, cliente")] Bufet bufet)
         {
             if (ModelState.IsValid)
             {
+                var num_client = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == bufet.cliente.Num_Cliente);
+                if (num_client == null)
+                {
+                    return NotFound();
+                }
+                bufet.cliente = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == bufet.cliente.Num_Cliente);
                 bufet.ID = Guid.NewGuid();
                 _context.Add(bufet);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return View("Ventas");
+                return RedirectToAction("Create", "Ventas", bufet);
             }
             return View(bufet);
         }

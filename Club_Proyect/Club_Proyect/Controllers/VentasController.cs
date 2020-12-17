@@ -44,11 +44,24 @@ namespace Club_Proyect.Controllers
             return View(venta);
         }
 
-        // GET: Ventas/Create
-        public IActionResult Create()
+        ////GET: Ventas/Create
+        //public IActionResult Create()
+        //{
+        //    var listaProducto = _context.Productos.ToList();
+        //    ViewBag.productos = listaProducto;
+        //    return View();
+        //}
+
+        public IActionResult Create([Bind("ID,Horario, cliente")] Bufet bufet)
         {
             var listaProducto = _context.Productos.ToList();
             ViewBag.productos = listaProducto;
+
+            if (bufet.cliente is null)
+            {
+                bufet = _context.Bufet.Include("cliente").FirstOrDefault(x => x.ID == bufet.ID);
+            }
+            ViewBag.bufet = bufet;
             return View();
         }
 
@@ -61,10 +74,13 @@ namespace Club_Proyect.Controllers
         {
             if (ModelState.IsValid)
             {
+                var bufet = (Bufet)ViewBag.bufet;
                 var prodid = new Guid(venta.Prod);
                 var producto = _context.Productos.FirstOrDefault(p=>p.ID==prodid);
                 venta.ID = Guid.NewGuid();
                 venta.productos = producto;
+                bufet.venta.ID = venta.ID;
+                _context.Update(bufet);
                 _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -165,7 +181,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var venta = await _context.Venta.FindAsync(id);
-            venta.ActivooNo = false;
+            venta.ActivooNo = false; //baja logica
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
