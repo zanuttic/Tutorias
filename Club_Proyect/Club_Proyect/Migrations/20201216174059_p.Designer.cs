@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_Proyect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201210171224_ee")]
-    partial class ee
+    [Migration("20201216174059_p")]
+    partial class p
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,15 +103,21 @@ namespace Club_Proyect.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("ActivooNo");
+
                     b.Property<DateTime>("Fecha");
 
                     b.Property<double>("Renta");
 
                     b.Property<string>("metodoPago");
 
+                    b.Property<Guid?>("productosID");
+
                     b.Property<double>("totalVenta");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("productosID");
 
                     b.ToTable("Venta");
                 });
@@ -409,6 +415,13 @@ namespace Club_Proyect.Migrations
                     b.HasOne("Club_Proyect.Entity.Persona", "persona")
                         .WithMany()
                         .HasForeignKey("personaID");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Venta", b =>
+                {
+                    b.HasOne("Club_Proyect.Entities.Productos", "productos")
+                        .WithMany()
+                        .HasForeignKey("productosID");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entities.horario_Deporte", b =>

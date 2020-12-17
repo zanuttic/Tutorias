@@ -23,7 +23,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> Index()
         {
             
-            return View(await _context.Venta.ToListAsync());
+            return View( _context.Venta.Include(x => x.productos).ToList());
         }
 
         // GET: Ventas/Details/5
@@ -34,7 +34,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var venta = await _context.Venta
+            var venta = await _context.Venta.Include(x => x.productos)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (venta == null)
             {
@@ -80,7 +80,7 @@ namespace Club_Proyect.Controllers
                 return NotFound();
             }
 
-            var venta = await _context.Venta.FindAsync(id);
+            var venta = await _context.Venta.Include(x => x.productos).FirstOrDefaultAsync(x => x.ID == id);
             if (venta == null)
             {
                 return NotFound();
@@ -93,7 +93,7 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Fecha,metodoPago,Renta,totalVenta")] Venta venta)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Fecha,metodoPago,Renta,totalVenta, productos")] Venta venta)
         {
             if (id != venta.ID)
             {
@@ -104,7 +104,25 @@ namespace Club_Proyect.Controllers
             {
                 try
                 {
-                    _context.Update(venta);
+                    //recuperar productos de bd productos id
+                    var p = _context.Productos.FirstOrDefault(x => x.ID == venta.productos.ID);
+
+                    //pisar el objeto producto dentro de obj venta
+                    p.Nombre = venta.productos.Nombre;
+                    p.Costo = venta.productos.Costo;
+                    p.Ganancia = venta.productos.Ganancia;
+                    p.Impuesto = venta.productos.Impuesto;
+                    p.Stock = venta.productos.Stock;
+
+                    var v = _context.Venta.FirstOrDefault(x => x.ID == venta.productos.ID);
+
+                    p.Nombre = venta.productos.Nombre;
+                    p.Costo = venta.productos.Costo;
+                    p.Ganancia = venta.productos.Ganancia;
+                    p.Impuesto = venta.productos.Impuesto;
+                    p.Stock = venta.productos.Stock;
+
+                    //_context.Update(venta);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -147,7 +165,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var venta = await _context.Venta.FindAsync(id);
-            _context.Venta.Remove(venta);
+            venta.ActivooNo = false;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

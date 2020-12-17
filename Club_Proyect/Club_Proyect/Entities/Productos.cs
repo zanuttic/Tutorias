@@ -15,7 +15,8 @@ namespace Club_Proyect.Entities
                 var costoImpuesto = Costo + (Costo * Impuesto / 100);
                 var precio = costoImpuesto + (costoImpuesto * Ganancia / 100);
 
-                return  precio; } }
+                return  precio; } 
+        }
         public int Stock { get; set; }
         public double Costo { get; set; }
         public double Impuesto { get; set; }

@@ -101,15 +101,21 @@ namespace Club_Proyect.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("ActivooNo");
+
                     b.Property<DateTime>("Fecha");
 
                     b.Property<double>("Renta");
 
                     b.Property<string>("metodoPago");
 
+                    b.Property<Guid?>("productosID");
+
                     b.Property<double>("totalVenta");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("productosID");
 
                     b.ToTable("Venta");
                 });
@@ -407,6 +413,13 @@ namespace Club_Proyect.Migrations
                     b.HasOne("Club_Proyect.Entity.Persona", "persona")
                         .WithMany()
                         .HasForeignKey("personaID");
+                });
+
+            modelBuilder.Entity("Club_Proyect.Entities.Venta", b =>
+                {
+                    b.HasOne("Club_Proyect.Entities.Productos", "productos")
+                        .WithMany()
+                        .HasForeignKey("productosID");
                 });
 
             modelBuilder.Entity("Club_Proyect.Entities.horario_Deporte", b =>

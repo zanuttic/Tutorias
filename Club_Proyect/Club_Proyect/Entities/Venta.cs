@@ -15,7 +15,7 @@ namespace Club_Proyect.Entities
 
         public DateTime Fecha { get; set; }
         
-        public Productos productos;
+        public Productos productos { get; set; }
 
         public string metodoPago { get; set; }
         public double Renta { get; set; }
@@ -24,6 +24,8 @@ namespace Club_Proyect.Entities
 
         [NotMapped]
         public string Prod { get; set; }
+
+        public bool ActivooNo { get; set; }
 
 
     }

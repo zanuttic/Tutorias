@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Club_Proyect.Migrations
 {
-    public partial class ee : Migration
+    public partial class p : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -92,21 +92,6 @@ namespace Club_Proyect.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Productos", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Venta",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    Fecha = table.Column<DateTime>(nullable: false),
-                    metodoPago = table.Column<string>(nullable: true),
-                    Renta = table.Column<double>(nullable: false),
-                    totalVenta = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Venta", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -281,6 +266,29 @@ namespace Club_Proyect.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Venta",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    productosID = table.Column<Guid>(nullable: true),
+                    metodoPago = table.Column<string>(nullable: true),
+                    Renta = table.Column<double>(nullable: false),
+                    totalVenta = table.Column<double>(nullable: false),
+                    ActivooNo = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Venta", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Venta_Productos_productosID",
+                        column: x => x.productosID,
+                        principalTable: "Productos",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Bufet",
                 columns: table => new
                 {
@@ -442,6 +450,11 @@ namespace Club_Proyect.Migrations
                 table: "Vecino",
                 column: "personaID");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Venta_productosID",
+                table: "Venta",
+                column: "productosID");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_horario_Deporte_Socio_socioID",
                 table: "horario_Deporte",
@@ -487,9 +500,6 @@ namespace Club_Proyect.Migrations
                 name: "Empleado");
 
             migrationBuilder.DropTable(
-                name: "Productos");
-
-            migrationBuilder.DropTable(
                 name: "Vecino");
 
             migrationBuilder.DropTable(
@@ -503,6 +513,9 @@ namespace Club_Proyect.Migrations
 
             migrationBuilder.DropTable(
                 name: "Venta");
+
+            migrationBuilder.DropTable(
+                name: "Productos");
 
             migrationBuilder.DropTable(
                 name: "Persona");
