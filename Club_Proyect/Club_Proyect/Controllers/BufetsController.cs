@@ -22,7 +22,7 @@ namespace Club_Proyect.Controllers
         // GET: Bufets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bufet.Include(x => x.venta).ToListAsync());
+            return View(await _context.Bufet.Include(p => p.cliente).Include(x => x.venta).ToListAsync());
         }
 
         // GET: Bufets/Details/5

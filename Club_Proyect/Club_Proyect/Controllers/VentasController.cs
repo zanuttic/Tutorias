@@ -23,7 +23,7 @@ namespace Club_Proyect.Controllers
         public async Task<IActionResult> Index()
         {
             
-            return View( _context.Venta.Include(x => x.productos).ToList());
+            return View( _context.Venta.Where(x => x.ActivooNo == true).Include(x => x.productos).ToList());
         }
 
         // GET: Ventas/Details/5
@@ -61,7 +61,7 @@ namespace Club_Proyect.Controllers
             {
                 bufet = _context.Bufet.Include("cliente").FirstOrDefault(x => x.ID == bufet.ID);
             }
-            ViewBag.bufet = bufet;
+            ViewData["bufet"] = bufet;
             return View();
         }
 
@@ -70,17 +70,18 @@ namespace Club_Proyect.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Fecha,metodoPago,Renta,totalVenta,Prod")] Venta venta)
+        public async Task<IActionResult> Create([Bind("ID,Fecha,metodoPago,Renta,totalVenta,Prod, ID_Bufet")] Venta venta)
         {
             if (ModelState.IsValid)
             {
-                var bufet = (Bufet)ViewBag.bufet;
+                //var bufet = _context.Bufet.FirstOrDefault(x => x.ID == venta.ID_Bufet);
+                var BufetNuevo = new Entities.Bufet();
                 var prodid = new Guid(venta.Prod);
                 var producto = _context.Productos.FirstOrDefault(p=>p.ID==prodid);
                 venta.ID = Guid.NewGuid();
                 venta.productos = producto;
-                bufet.venta.ID = venta.ID;
-                _context.Update(bufet);
+                BufetNuevo.venta = venta;
+                _context.Add(BufetNuevo);
                 _context.Add(venta);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

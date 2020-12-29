@@ -24,9 +24,11 @@ namespace Club_Proyect.Entities
 
         [NotMapped]
         public string Prod { get; set; }
-
+        
         public bool ActivooNo { get; set; }
 
+        [NotMapped]
+        public Guid ID_Bufet { get; set; }
 
     }
 }
