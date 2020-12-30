@@ -74,8 +74,16 @@ namespace Club_Proyect.Controllers
         {
             if (ModelState.IsValid)
             {
+                int numCliente = Convert.ToInt32(TempData["NroCliente"]);
                 //var bufet = _context.Bufet.FirstOrDefault(x => x.ID == venta.ID_Bufet);
                 var BufetNuevo = new Entities.Bufet();
+                
+                var num_client = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == numCliente);
+                if (num_client == null)
+                {
+                    return NotFound();
+                }
+                BufetNuevo.cliente = num_client;
                 var prodid = new Guid(venta.Prod);
                 var producto = _context.Productos.FirstOrDefault(p=>p.ID==prodid);
                 venta.ID = Guid.NewGuid();

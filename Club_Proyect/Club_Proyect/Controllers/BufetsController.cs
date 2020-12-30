@@ -22,7 +22,7 @@ namespace Club_Proyect.Controllers
         // GET: Bufets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bufet.Include(p => p.cliente).Include(x => x.venta).ToListAsync());
+            return View(await _context.Bufet.Include(p => p.cliente).Include(l => l.cliente.persona).Include(x => x.venta).ToListAsync());
         }
 
         // GET: Bufets/Details/5
@@ -59,13 +59,13 @@ namespace Club_Proyect.Controllers
             if (ModelState.IsValid)
             {
                 var num_client = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == bufet.cliente.Num_Cliente);
+                TempData["NroCliente"] = bufet.cliente.Num_Cliente;
                 if (num_client == null)
                 {
                     return NotFound();
                 }
                 bufet.cliente = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == bufet.cliente.Num_Cliente);
                 bufet.ID = Guid.NewGuid();
-                _context.Add(bufet);
                 await _context.SaveChangesAsync();
                 //return View("Ventas");
                 return RedirectToAction("Create", "Ventas", bufet);
