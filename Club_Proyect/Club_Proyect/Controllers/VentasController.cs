@@ -20,11 +20,16 @@ namespace Club_Proyect.Controllers
         }
 
         // GET: Ventas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? value)
         {
-            
-            return View( _context.Venta.Where(x => x.ActivooNo == true).Include(x => x.productos).ToList());
+            int pageSize = 2;
+            //var venta = _context.Venta.Where(x => x.ActivooNo == true).Include(x => x.productos).ToList();
+            var venta = from j in _context.Venta select j;
+            return View(await Paginacion<Venta>.CreateAsync(venta.AsNoTracking(), value ?? 1, pageSize));
+
+            //   return View(_context.Venta.Where(x => x.ActivooNo == true).Include(x => x.productos).ToList());
         }
+      
 
         // GET: Ventas/Details/5
         public async Task<IActionResult> Details(Guid? id)

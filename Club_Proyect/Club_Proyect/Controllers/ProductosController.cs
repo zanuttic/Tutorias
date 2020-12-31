@@ -20,9 +20,52 @@ namespace Club_Proyect.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Productos.ToListAsync());
+        //}
+
+        public async Task<IActionResult> Index(string SortOrder, string currentFilter, string searchString, int? value)
         {
-            return View(await _context.Productos.ToListAsync());
+            ViewData["NombreSortParm"] = String.IsNullOrEmpty(SortOrder) ? "nombre_desc" : "";
+            ViewData["CategoriaSortParam"] = SortOrder == "categoria_asc" ? "categoria_desc" : "categoria_asc";
+
+            if (searchString != null)
+            {
+                value = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = SortOrder;
+
+            var productosQuery = from j in _context.Productos select j;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productosQuery = productosQuery.Where(j => j.Nombre.Contains(searchString) || j.Impuesto.ToString().Contains(searchString) );
+
+            }
+
+            switch (SortOrder)
+            {
+                case "nombre_desc":
+                    productosQuery = productosQuery.OrderByDescending(j => j.Nombre);
+                    break;
+                default:
+                    productosQuery = productosQuery.OrderBy(j => j.Nombre);
+                    break;
+
+
+            }
+
+            int pageSize = 10;
+            return View(await Paginacion<Productos>.CreateAsync(productosQuery.AsNoTracking(), value ?? 1, pageSize));
+            // return View(await juegos.AsNoTracking().ToListAsync());
+
+            //return View(await _context.Juegos.ToListAsync());
         }
 
         // GET: Productos/Details/5

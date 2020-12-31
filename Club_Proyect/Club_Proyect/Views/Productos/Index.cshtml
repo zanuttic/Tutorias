@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Club_Proyect.Entities.Productos>
+﻿@model Paginacion<Club_Proyect.Entities.Productos>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,57 +9,104 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Costo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Impuesto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ganancia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Costo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Impuesto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ganancia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<form asp-action="Index" method="get">
+    <div class="form-action no-Color">
+        <p>
+            Filtro de busqueda: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Buscar" class="btn btn-default" />
+            <a asp-action="Index">Reiniciar Filtro de Busqueda</a>| Registros Mostrados @Model.TotalR
+        </p>
+    </div>
+
+</form>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NombreSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nombre</a>
+                </th>
+                <th>
+                    stock
+                    @*@Html.DisplayNameFor(model => model.Stock)*@
+                </th>
+                <th>
+                    costo
+                    @*@Html.DisplayNameFor(model => model.Costo)*@
+                </th>
+                <th>
+                    Impuesto
+                    @*@Html.DisplayNameFor(model => model.Impuesto)*@
+                </th>
+                <th>
+                    Ganancia
+                    @*@Html.DisplayNameFor(model => model.Ganancia)*@
+                </th>
+                <th>
+                    Precio
+                    @*@Html.DisplayNameFor(model => model.Precio)*@
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Stock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Impuesto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ganancia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-value="@(Model.PageIndex - 1)"
+       asp-route-currenFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Anterior
+    </a>
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-value="@i"
+           asp-route-currenFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default">
+            @i
+        </a>
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-value="@(Model.PageIndex + 1)"
+       asp-route-currenFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Siguiente
+    </a>
+</div>

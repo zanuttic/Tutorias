@@ -66,7 +66,7 @@ namespace Club_Proyect.Controllers
                 }
                 bufet.cliente = _context.Cliente.FirstOrDefault(x => x.Num_Cliente == bufet.cliente.Num_Cliente);
                 bufet.ID = Guid.NewGuid();
-                await _context.SaveChangesAsync();
+               // await _context.SaveChangesAsync();
                 //return View("Ventas");
                 return RedirectToAction("Create", "Ventas", bufet);
             }

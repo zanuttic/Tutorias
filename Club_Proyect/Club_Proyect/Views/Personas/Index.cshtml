@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Club_Proyect.Entity.Persona>
+﻿@model Paginacion<Club_Proyect.Entity.Persona>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,57 +9,109 @@
 <p>
     <a asp-action="Create">Crear Persona</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
+<form asp-action="Index" method="get">
+    <div class="form-action no-Color">
+        <p>
+            Filtro de busqueda: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Buscar" class="btn btn-default" />
+            <a asp-action="Index">Reiniciar Filtro de Busqueda</a>| Registros Mostrados @Model.TotalR
+        </p>
+    </div>
+
+</form>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    DNI
+                    @*@Html.DisplayNameFor(model => model.DNI)*@
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NombreSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nombre</a>
+                </th>
+                @*<th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>*@
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ApellidoSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Apellido</a>
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.DNI)
+                FechaNacimiento
+                @*@Html.DisplayNameFor(model => model.FechaNacimiento)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                Direccion
+                @*@Html.DisplayNameFor(model => model.Direccion)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Apellido)
+                Activo
+                @*@Html.DisplayNameFor(model => model.Activo)*@
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaNacimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Activo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DNI)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Apellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaNacimiento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Activo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Eliminar</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DNI)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Apellido)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activo)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Detalles</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-value="@(Model.PageIndex - 1)"
+       asp-route-currenFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Anterior
+    </a>
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-value="@i"
+           asp-route-currenFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default">
+            @i
+        </a>
+    }
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-value="@(Model.PageIndex + 1)"
+       asp-route-currenFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Siguiente
+    </a>
+</div>
