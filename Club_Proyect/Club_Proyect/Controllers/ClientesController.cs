@@ -21,13 +21,69 @@ namespace Club_Proyect.Controllers
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index()
+        //  public async Task<IActionResult> Index()
+        // {
+        //  var listaCliente = _context.Cliente.Where(s=>s.Activo_oNo==true).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+        //
+        //    return View(await _context.Cliente.ToListAsync());
+        //} 
+        public async Task<IActionResult> Index(string SortOrder, string currentFilter, string searchString, int? value)
         {
-            var listaCliente = _context.Cliente.Where(s=>s.Activo_oNo==true).Include(x => x.persona).ToList(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+            //ViewData["NombreSortParm"] = String.IsNullOrEmpty(SortOrder) ? "nombre_desc" : "";
+            ViewData["NombreSortParm"] = SortOrder == "nombre_asc" ? "nombre_desc" : "nombre_asc";
+            ViewData["ApellidoSortParam"] = SortOrder == "apellido_asc" ? "apellido_desc" : "apellido_asc";
 
-            return View(await _context.Cliente.ToListAsync());
+
+            if (searchString != null)
+            {
+                value = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = SortOrder;
+
+            var Clientequery = from j in _context.Cliente select j;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Clientequery = Clientequery.Include(j =>j.persona).Where(j => j.persona.Nombre.Contains(searchString) || j.persona.Apellido.Contains(searchString)
+                || j.persona.Direccion.Contains(searchString)
+                || j.persona.DNI.ToString().Contains(searchString)
+                || j.persona.FechaNacimiento.ToString().Contains(searchString));
+
+            }
+
+            switch (SortOrder)
+            {
+                case "nombre_desc":
+                    Clientequery = Clientequery.OrderByDescending(j => j.persona.Nombre);
+                    break;
+                case "nombre_asc":
+                    Clientequery = Clientequery.OrderBy(j => j.persona.Nombre);
+                    break;
+                case "apellido_desc":
+                    Clientequery = Clientequery.OrderByDescending(j => j.persona.Apellido);
+                    break;
+                case "apellido_asc":
+                    Clientequery = Clientequery.OrderBy(j => j.persona.Apellido);
+                    break;
+                default:
+                    Clientequery = Clientequery.OrderBy(j => j.persona.Nombre);
+                    break;
+
+
+            }
+
+            int pageSize = 10;
+            return View(await Paginacion<Cliente>.CreateAsync(Clientequery.AsNoTracking(), value ?? 1, pageSize));
+            // return View(await juegos.AsNoTracking().ToListAsync());
+
+            //return View(await _context.Juegos.ToListAsync());
         }
-
+        
         // GET: Clientes/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
