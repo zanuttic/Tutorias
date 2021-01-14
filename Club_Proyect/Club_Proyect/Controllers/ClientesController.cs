@@ -45,11 +45,11 @@ namespace Club_Proyect.Controllers
             ViewData["CurrentFilter"] = searchString;
             ViewData["CurrentSort"] = SortOrder;
 
-            var Clientequery = from j in _context.Cliente select j;
+            var Clientequery = from j in  _context.Cliente.Include(j =>j.persona) where j.Activo_oNo == true select j; 
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                Clientequery = Clientequery.Include(j =>j.persona).Where(j => j.persona.Nombre.Contains(searchString) || j.persona.Apellido.Contains(searchString)
+                Clientequery = Clientequery.Where(j => j.persona.Nombre.Contains(searchString) || j.persona.Apellido.Contains(searchString)
                 || j.persona.Direccion.Contains(searchString)
                 || j.persona.DNI.ToString().Contains(searchString)
                 || j.persona.FechaNacimiento.ToString().Contains(searchString));
@@ -78,6 +78,7 @@ namespace Club_Proyect.Controllers
             }
 
             int pageSize = 10;
+            var cli = Clientequery.AsNoTracking();
             return View(await Paginacion<Cliente>.CreateAsync(Clientequery.AsNoTracking(), value ?? 1, pageSize));
             // return View(await juegos.AsNoTracking().ToListAsync());
 
