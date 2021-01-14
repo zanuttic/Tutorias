@@ -23,11 +23,59 @@ namespace Club_Proyect.Controllers
         }
 
         // GET: Vecinos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SortOrder, string currentFilter, string searchString, int? value)
         {
-            return View(await _context.Vecino.Where(s => s.Activo == true).Include(p => p.persona).ToListAsync());
-        }
+            //return View(await _context.Vecino.Where(s => s.Activo == true).Include(p => p.persona).ToListAsync());
+            ViewData["NombreSortParm"] = SortOrder == "nombre_asc" ? "nombre_desc" : "nombre_asc";
+            ViewData["ApellidoSortParam"] = SortOrder == "apellido_asc" ? "apellido_desc" : "apellido_asc";
 
+            if (searchString != null)
+            {
+                value = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = SortOrder;
+
+            var Vecinoquery = from j in _context.Vecino.Include(j => j.persona) where j.Activo == true select j;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Vecinoquery = Vecinoquery.Where(j => j.persona.Nombre.Contains(searchString) || j.persona.Apellido.Contains(searchString)
+                || j.persona.Direccion.Contains(searchString)
+                || j.persona.DNI.ToString().Contains(searchString)
+                || j.persona.FechaNacimiento.ToString().Contains(searchString));
+            }
+
+            switch (SortOrder)
+            {
+                case "nombre_desc":
+                    Vecinoquery = Vecinoquery.OrderByDescending(j => j.persona.Nombre);
+                    break;
+                case "nombre_asc":
+                    Vecinoquery = Vecinoquery.OrderBy(j => j.persona.Nombre);
+                    break;
+                case "apellido_desc":
+                    Vecinoquery = Vecinoquery.OrderByDescending(j => j.persona.Apellido);
+                    break;
+                case "apellido_asc":
+                    Vecinoquery = Vecinoquery.OrderBy(j => j.persona.Apellido);
+                    break;
+                default:
+                    Vecinoquery = Vecinoquery.OrderBy(j => j.persona.Nombre);
+                    break;
+
+
+            }
+
+            int pageSize = 10;
+            var cli = Vecinoquery.AsNoTracking();
+            return View(await Paginacion<Vecino>.CreateAsync(Vecinoquery.AsNoTracking(), value ?? 1, pageSize));
+
+        }
         // GET: Vecinos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
