@@ -21,11 +21,56 @@ namespace Club_Proyect.Controllers
         }
 
         // GET: Socios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SortOrder, string currentFilter, string searchString, int? value)
         {
-            var listaSocio = await _context.Socio.Where(s => s.ActivoOno == true).Include(x => x.persona).ToListAsync(); //Include incluye los datos de la entidad que se relacione asociado a ese cliente
+            ViewData["NombreSortParm"] = SortOrder == "nombre_asc" ? "nombre_desc" : "nombre_asc";
+            ViewData["ApellidoSortParam"] = SortOrder == "apellido_asc" ? "apellido_desc" : "apellido_asc";
 
-            return View(listaSocio);
+            if (searchString != null)
+            {
+                value = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = SortOrder;
+
+            var Socioquery = from j in _context.Socio.Include(j => j.persona) where j.ActivoOno == true select j;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Socioquery = Socioquery.Where(j => j.persona.Nombre.Contains(searchString) || j.persona.Apellido.Contains(searchString)
+                || j.persona.Direccion.Contains(searchString)
+                || j.persona.DNI.ToString().Contains(searchString)
+                || j.persona.FechaNacimiento.ToString().Contains(searchString));
+            }
+
+            switch (SortOrder)
+            {
+                case "nombre_desc":
+                    Socioquery = Socioquery.OrderByDescending(j => j.persona.Nombre);
+                    break;
+                case "nombre_asc":
+                    Socioquery = Socioquery.OrderBy(j => j.persona.Nombre);
+                    break;
+                case "apellido_desc":
+                    Socioquery = Socioquery.OrderByDescending(j => j.persona.Apellido);
+                    break;
+                case "apellido_asc":
+                    Socioquery = Socioquery.OrderBy(j => j.persona.Apellido);
+                    break;
+                default:
+                    Socioquery = Socioquery.OrderBy(j => j.persona.Nombre);
+                    break;
+
+
+            }
+
+            int pageSize = 10;
+            var soc = Socioquery.AsNoTracking();
+            return View(await Paginacion<Socio>.CreateAsync(Socioquery.AsNoTracking(), value ?? 1, pageSize));
         }
 
         // GET: Socios/Details/5
